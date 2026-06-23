@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioKnubbel.Companion", "AudioKnubbel.Companion\AudioKnubbel.Companion.csproj", "{7AB04527-D939-4623-986A-907E0EC0ABE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioKnubbel.Companion.Tests", "AudioKnubbel.Companion.Tests\AudioKnubbel.Companion.Tests.csproj", "{B0FCACEA-E6A5-4C21-8C57-E3298CD27CBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7AB04527-D939-4623-986A-907E0EC0ABE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB04527-D939-4623-986A-907E0EC0ABE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB04527-D939-4623-986A-907E0EC0ABE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB04527-D939-4623-986A-907E0EC0ABE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0FCACEA-E6A5-4C21-8C57-E3298CD27CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0FCACEA-E6A5-4C21-8C57-E3298CD27CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0FCACEA-E6A5-4C21-8C57-E3298CD27CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0FCACEA-E6A5-4C21-8C57-E3298CD27CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

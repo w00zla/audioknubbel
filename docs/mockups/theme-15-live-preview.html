@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crow Knob 15-Level Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Segoe UI, Arial, sans-serif;
+      background: #07080a;
+      color: #f3f7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #07080a;
+    }
+    header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin: 0 auto 20px;
+      max-width: 1320px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 650;
+      letter-spacing: 0;
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: auto minmax(240px, 360px) 48px;
+      align-items: center;
+      gap: 12px;
+      color: #b9c6d8;
+      font-size: 14px;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: #65d8ff;
+    }
+    main {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    section {
+      min-width: 0;
+    }
+    .stage {
+      display: grid;
+      place-items: center;
+      min-height: 420px;
+      border: 1px solid #1b2330;
+      background: #030406;
+      overflow: hidden;
+    }
+    .stage img {
+      width: min(100%, 620px);
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      display: block;
+    }
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: #dbe7f8;
+      font-size: 15px;
+      font-weight: 650;
+    }
+    .level {
+      color: #7f8da3;
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
+    .strip {
+      display: grid;
+      grid-template-columns: repeat(15, 1fr);
+      gap: 6px;
+      margin-top: 12px;
+    }
+    button {
+      appearance: none;
+      border: 1px solid #1c2634;
+      background: #0d1118;
+      color: #dfe9f8;
+      padding: 0;
+      cursor: pointer;
+      min-width: 0;
+    }
+    button.active {
+      border-color: #6bdcff;
+      box-shadow: 0 0 0 1px #6bdcff inset;
+    }
+    button img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+    button span {
+      display: block;
+      font-size: 11px;
+      line-height: 18px;
+      color: #92a0b5;
+    }
+    @media (max-width: 900px) {
+      body { padding: 14px; }
+      header {
+        display: grid;
+      }
+      main {
+        grid-template-columns: 1fr;
+      }
+      .controls {
+        grid-template-columns: auto 1fr 48px;
+      }
+      .stage {
+        min-height: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Crow Knob 15-Level Preview</h1>
+    <label class="controls">
+      <span>Level</span>
+      <input id="level" type="range" min="0" max="14" value="0">
+      <span id="levelText">00</span>
+    </label>
+  </header>
+
+  <main>
+    <section>
+      <div class="title"><span>Plasma</span><span class="level" id="plasmaName"></span></div>
+      <div class="stage"><img id="plasmaImage" alt="Plasma level preview"></div>
+      <div class="strip" id="plasmaStrip"></div>
+    </section>
+
+    <section>
+      <div class="title"><span>Cyberpunk</span><span class="level" id="cyberpunkName"></span></div>
+      <div class="stage"><img id="cyberpunkImage" alt="Cyberpunk level preview"></div>
+      <div class="strip" id="cyberpunkStrip"></div>
+    </section>
+  </main>
+
+  <script>
+    const levelInput = document.querySelector("#level");
+    const levelText = document.querySelector("#levelText");
+    const themes = [
+      {
+        id: "plasma",
+        pattern: "plasma-grow-15-{n}.png",
+        image: document.querySelector("#plasmaImage"),
+        name: document.querySelector("#plasmaName"),
+        strip: document.querySelector("#plasmaStrip")
+      },
+      {
+        id: "cyberpunk",
+        pattern: "cyberpunk-liquid-15-{n}.png",
+        image: document.querySelector("#cyberpunkImage"),
+        name: document.querySelector("#cyberpunkName"),
+        strip: document.querySelector("#cyberpunkStrip")
+      }
+    ];
+
+    const pad = (n) => String(n).padStart(2, "0");
+    const srcFor = (theme, level) => theme.pattern.replace("{n}", pad(level));
+
+    for (const theme of themes) {
+      for (let i = 0; i <= 14; i++) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.level = i;
+        button.innerHTML = `<img src="${srcFor(theme, i)}" alt=""><span>${pad(i)}</span>`;
+        button.addEventListener("click", () => {
+          levelInput.value = String(i);
+          update(i);
+        });
+        theme.strip.append(button);
+      }
+    }
+
+    function update(level) {
+      levelText.textContent = pad(level);
+      for (const theme of themes) {
+        theme.image.src = srcFor(theme, level);
+        theme.name.textContent = srcFor(theme, level);
+        for (const button of theme.strip.querySelectorAll("button")) {
+          button.classList.toggle("active", Number(button.dataset.level) === level);
+        }
+      }
+    }
+
+    levelInput.addEventListener("input", () => update(Number(levelInput.value)));
+    update(0);
+  </script>
+</body>
+</html>

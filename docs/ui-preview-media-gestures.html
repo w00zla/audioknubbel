@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>audioknubbel GUI Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #111;
+      color: #f4f4f4;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      gap: 24px;
+      padding: 32px;
+      box-sizing: border-box;
+    }
+
+    .knob {
+      width: 480px;
+      max-width: min(88vw, 480px);
+      aspect-ratio: 1;
+      position: relative;
+      border-radius: 50%;
+      background: #000;
+      box-shadow: 0 24px 80px #000;
+      overflow: hidden;
+    }
+
+    .ticks {
+      position: absolute;
+      inset: 0;
+    }
+
+    .tick {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 6px;
+      height: 30px;
+      margin-left: -3px;
+      margin-top: -216px;
+      border-radius: 6px;
+      transform-origin: 3px 216px;
+      background: rgb(45, 45, 45);
+    }
+
+    .tick.lit.green {
+      background: rgb(0, 220, 90);
+      box-shadow: 0 0 14px rgba(0, 220, 90, .82), 0 0 30px rgba(0, 220, 90, .46);
+    }
+    .tick.lit.amber {
+      background: rgb(255, 170, 0);
+      box-shadow: 0 0 14px rgba(255, 170, 0, .82), 0 0 30px rgba(255, 170, 0, .46);
+    }
+    .tick.lit.red {
+      background: rgb(255, 50, 50);
+      box-shadow: 0 0 14px rgba(255, 50, 50, .82), 0 0 30px rgba(255, 50, 50, .46);
+    }
+
+    .knob.vol-pulse .tick.lit.green {
+      box-shadow: 0 0 18px rgba(0, 220, 90, 1), 0 0 44px rgba(0, 220, 90, .72);
+    }
+    .knob.vol-pulse .tick.lit.amber {
+      box-shadow: 0 0 18px rgba(255, 170, 0, 1), 0 0 44px rgba(255, 170, 0, .72);
+    }
+    .knob.vol-pulse .tick.lit.red {
+      box-shadow: 0 0 18px rgba(255, 50, 50, 1), 0 0 44px rgba(255, 50, 50, .72);
+    }
+
+    .center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+    .volume {
+      font-size: clamp(48px, 13vw, 84px);
+      line-height: 1;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mute-icon {
+      display: none;
+      width: 116px;
+      height: 116px;
+      color: #ff5050;
+      filter: drop-shadow(0 0 18px #ff3232);
+    }
+
+    .knob.muted .volume { display: none; }
+    .knob.muted .mute-icon { display: block; }
+    .knob.muted .tick.lit { background: rgb(45, 45, 45); box-shadow: none; }
+
+    .hint {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      color: #d8d8d8;
+      opacity: .78;
+    }
+
+    .hint svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .hint.prev { left: 88px; top: 50%; transform: translateY(-50%); }
+    .hint.next { right: 88px; top: 50%; transform: translateY(-50%); }
+    .hint.play { top: 106px; left: 50%; transform: translateX(-50%); }
+
+    .status-dot {
+      position: absolute;
+      left: 50%;
+      bottom: 32px;
+      width: 28px;
+      height: 28px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: rgb(255, 40, 40);
+    }
+
+    .burst {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .burst svg {
+      width: 150px;
+      height: 150px;
+      color: #20e6ff;
+      filter: drop-shadow(0 0 18px #20e6ff) drop-shadow(0 0 34px #20e6ff88);
+    }
+
+    .burst.show {
+      animation: burst 760ms ease-out both;
+    }
+
+    .hint.pulse {
+      animation: hint 760ms ease-out both;
+    }
+
+    @keyframes burst {
+      0% { opacity: 0; transform: scale(.55); }
+      16% { opacity: 1; transform: scale(1.18); }
+      72% { opacity: .88; transform: scale(1); }
+      100% { opacity: 0; transform: scale(.82); }
+    }
+
+    @keyframes hint {
+      0% { opacity: .78; color: #d8d8d8; }
+      18% { opacity: 1; color: #ffffff; filter: drop-shadow(0 0 16px #fff); }
+      100% { opacity: .78; color: #d8d8d8; }
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    button {
+      border: 1px solid #3a3a3a;
+      background: #202020;
+      color: #f4f4f4;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:hover { background: #2b2b2b; }
+  </style>
+</head>
+<body>
+  <main class="knob" id="knob">
+    <div class="ticks" id="ticks" aria-hidden="true"></div>
+    <div class="hint prev" id="hint-prev" title="Swipe left: previous">
+      <svg viewBox="0 0 64 64"><path fill="currentColor" d="M18 15h6v34h-6zm8 17 24-17v34z"/></svg>
+    </div>
+    <div class="hint play" id="hint-play" title="Double tap: play/pause">
+      <svg viewBox="0 0 64 64"><path fill="currentColor" d="M10 14v36l24-18zm34 0h7v36h-7zm11 0h7v36h-7z"/></svg>
+    </div>
+    <div class="hint next" id="hint-next" title="Swipe right: next">
+      <svg viewBox="0 0 64 64"><path fill="currentColor" d="M40 15h6v34h-6zM14 15l24 17-24 17z"/></svg>
+    </div>
+    <div class="center">
+      <div class="volume" id="volume">50%</div>
+      <svg class="mute-icon" viewBox="0 0 64 64" aria-label="Muted">
+        <path fill="currentColor" d="M4 24h12l16-14v44L16 40H4z"/>
+        <path fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" d="M42 24l12 16M54 24 42 40"/>
+      </svg>
+    </div>
+    <div class="status-dot" title="Companion disconnected"></div>
+    <div class="burst" id="burst"></div>
+  </main>
+  <nav class="controls" aria-label="Preview controls">
+    <button type="button" data-action="prev">Swipe Left</button>
+    <button type="button" data-action="play">Double Tap</button>
+    <button type="button" data-action="next">Swipe Right</button>
+    <button type="button" data-action="mute">Mute</button>
+    <button type="button" data-action="vol">Volume +</button>
+  </nav>
+
+  <script>
+    const tickRoot = document.querySelector("#ticks");
+    const knob = document.querySelector("#knob");
+    const volume = document.querySelector("#volume");
+    const burst = document.querySelector("#burst");
+    const icons = {
+      prev: '<svg viewBox="0 0 64 64"><path fill="currentColor" d="M18 15h6v34h-6zm8 17 24-17v34z"/></svg>',
+      play: '<svg viewBox="0 0 64 64"><path fill="currentColor" d="M10 14v36l24-18zm34 0h7v36h-7zm11 0h7v36h-7z"/></svg>',
+      next: '<svg viewBox="0 0 64 64"><path fill="currentColor" d="M40 15h6v34h-6zM14 15l24 17-24 17z"/></svg>'
+    };
+    let value = 50;
+    let muted = false;
+
+    for (let i = 0; i < 37; i++) {
+      const tick = document.createElement("span");
+      const frac = i / 36;
+      tick.className = "tick";
+      tick.style.transform = `rotate(${135 + frac * 270}deg)`;
+      tickRoot.append(tick);
+    }
+
+    function paint() {
+      const lit = Math.round(value * 36 / 100);
+      [...tickRoot.children].forEach((tick, i) => {
+        tick.className = "tick";
+        if (!muted && i <= lit) {
+          tick.classList.add("lit", i < 12 ? "green" : i < 24 ? "amber" : "red");
+        }
+      });
+      knob.classList.toggle("muted", muted);
+      volume.textContent = `${value}%`;
+    }
+
+    function flash(kind) {
+      burst.innerHTML = icons[kind];
+      burst.classList.remove("show");
+      document.querySelectorAll(".hint").forEach((el) => el.classList.remove("pulse"));
+      void burst.offsetWidth;
+      burst.classList.add("show");
+      document.querySelector(`#hint-${kind}`).classList.add("pulse");
+    }
+
+    function pulseVolume() {
+      knob.classList.remove("vol-pulse");
+      void knob.offsetWidth;
+      knob.classList.add("vol-pulse");
+      setTimeout(() => knob.classList.remove("vol-pulse"), 260);
+    }
+
+    document.querySelector(".controls").addEventListener("click", (event) => {
+      const action = event.target.dataset.action;
+      if (!action) return;
+      if (action === "mute") muted = !muted;
+      if (action === "vol") {
+        value = (value + 8) % 104;
+        pulseVolume();
+      }
+      if (action === "prev" || action === "play" || action === "next") flash(action);
+      paint();
+    });
+
+    paint();
+    setTimeout(() => flash("play"), 500);
+  </script>
+</body>
+</html>

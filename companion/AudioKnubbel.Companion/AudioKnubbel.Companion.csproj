@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>AudioKnubbel.Companion</RootNamespace>
+    <ApplicationIcon>audioknubbel.ico</ApplicationIcon>
+  </PropertyGroup>
+  <!-- Developer-Menü (Flash-Mode-Eintrag) standardmäßig in ALLEN Targets aktiv
+       (dotnet run + exe-publish). Zum Deaktivieren: -p:EnableDeveloperMenu=false -->
+  <PropertyGroup>
+    <EnableDeveloperMenu Condition="'$(EnableDeveloperMenu)' == ''">true</EnableDeveloperMenu>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(EnableDeveloperMenu)' == 'true'">
+    <DefineConstants>$(DefineConstants);DEVELOPER_MENU</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="audioknubbel.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="System.IO.Ports" Version="10.0.0" />
+    <PackageReference Include="System.Management" Version="10.0.0" />
+  </ItemGroup>
+</Project>

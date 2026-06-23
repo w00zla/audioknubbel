@@ -1,0 +1,11 @@
+.pio/
+
+# .NET (companion app)
+[Bb]in/
+[Oo]bj/
+
+# Publish-Artefakte
+dist/
+
+# Superpowers Brainstorm-Companion (lokaler Scratch)
+.superpowers/

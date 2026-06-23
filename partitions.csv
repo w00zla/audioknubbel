@@ -1,0 +1,12 @@
+# audioknubbel Partition-Layout (16 MB Flash, Single-App).
+# Kein OTA (Flash läuft per USB-ROM-Download), kein SPIFFS/FS — Hintergründe sind
+# einkompiliert. Gegenüber dem alten Dual-OTA-Default (app0/app1 je 3,19 MB + 1,5 MB
+# spiffs, nur 8 MB gemappt) gibt das dem App-Slot ~15,9 MB statt 3,19 MB.
+#
+# WICHTIG: nvs MUSS auf 0x9000/0x5000 bleiben — gleicher Offset/Size wie zuvor, damit
+# ein normaler `pio upload` (ohne erase_flash) Helligkeit/Standby/Theme erhält.
+#
+# Name,     Type, SubType,  Offset,    Size
+nvs,        data, nvs,      0x9000,    0x5000
+factory,    app,  factory,  0x10000,   0xFE0000
+coredump,   data, coredump, 0xFF0000,  0x10000

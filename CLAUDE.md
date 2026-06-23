@@ -98,6 +98,12 @@ Board → PC:   AUDIOKNUBBEL <fw>\n   (nur als Antwort auf ID?)
   (entkoppelt: nur Richtung + 150 ms Cooldown, da Encoder mehrere Ticks/Rast liefert),
   **Long-Tap = übernehmen** (NVS via `theme_cfg`), Single-Tap = abbrechen. Noch nur die 2
   bestehenden Themes — neue Grafiken + feinere Stufen (15) sind eigene Folgeaufgaben.
+- **Rename → audioknubbel ✅** (2026-06-23): Projekt von `crow-knob` umbenannt, frisches
+  Repo unter `D:\ProjectsLocal\audioknubbel`. C#-Namespace `AudioKnubbel.Companion`,
+  Wire-Token `AUDIOKNUBBEL`, NVS-Namespace/USB-Manufacturer `audioknubbel`; Hardware-Refs
+  (`Elecrow`, `crowpanel-s3`) unverändert. Board neu geflasht (FW läuft); NVS-Config stand
+  einmalig auf Default. Tray-Reconnect-Fix: Connect-Versuch läuft jetzt im Hintergrund
+  (`Task.Run` + `_reconnecting`-Guard) statt blockierend auf dem UI-Thread.
 - Specs/Pläne unter `docs/superpowers/`, Handoffs unter `docs/`. Research:
   `docs/crowpanel-volume-knob-research.md`. Letzter Handoff:
-  `docs/handoff-2026-06-20-theme-switcher.md`.
+  `docs/handoff-2026-06-23-audioknubbel-rename.md`.

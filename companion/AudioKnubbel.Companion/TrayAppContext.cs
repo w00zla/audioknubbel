@@ -19,6 +19,7 @@ public sealed class TrayAppContext : ApplicationContext
     private readonly System.Windows.Forms.Timer _reconnect;
     private readonly System.Windows.Forms.Timer _debounce;
     private readonly System.Windows.Forms.Timer _heartbeat;
+    private volatile bool _reconnecting;   // verhindert überlappende Connect-Versuche
 
     // Verstecktes Control nur fürs Thread-Marshalling: Handle wird im Ctor
     // erzwungen, damit BeginInvoke ab sofort auf den UI-Thread posten kann.
@@ -52,8 +53,14 @@ public sealed class TrayAppContext : ApplicationContext
             if (_hasPending) { _hasPending = false; _sync.Sync(_pending); }
         };
 
+        // TryConnect() blockiert (WMI-Discovery + Handshake mit Sleeps/ReadTimeouts,
+        // bis zu ~4,75 s, wenn ein Espressif-Port da ist aber nicht antwortet). Der
+        // Tick läuft auf dem UI-Thread -> liefe das synchron, fröre das Tray bei jedem
+        // Versuch ein. Darum auf einen Background-Thread auslagern (wie QueryConfigAsync);
+        // ConnectionChanged marshallt sich via Post selbst zurück. _reconnecting verhindert,
+        // dass sich langsame Versuche stapeln, solange der 2-s-Timer weiterläuft.
         _reconnect = new System.Windows.Forms.Timer { Interval = 2000 };
-        _reconnect.Tick += (_, _) => { if (!_link.Connected) _link.TryConnect(); };
+        _reconnect.Tick += (_, _) => BeginReconnect();
         _reconnect.Start();
 
         // Heartbeat: hält den Disconnect-Punkt am Board fern, solange verbunden.
@@ -62,7 +69,24 @@ public sealed class TrayAppContext : ApplicationContext
         _heartbeat.Tick += (_, _) => { if (_link.Connected) _link.Send(Protocol.PingLine()); };
         _heartbeat.Start();
 
-        _link.TryConnect();   // sofortiger erster Versuch
+        BeginReconnect();   // sofortiger erster Versuch (im Hintergrund)
+    }
+
+    // Stößt einen (Re)Connect-Versuch auf einem Background-Thread an. TryConnect()
+    // blockiert (WMI-Discovery + Handshake mit Sleeps/ReadTimeouts, bis zu ~4,75 s,
+    // wenn ein Espressif-Port da ist, aber nicht antwortet). Würde das auf dem
+    // UI-Thread laufen (Timer-Tick / Ctor vor Application.Run), fröre das Tray bei
+    // jedem Versuch ein. ConnectionChanged marshallt sich via Post selbst zurück;
+    // _reconnecting verhindert, dass sich langsame Versuche stapeln.
+    private void BeginReconnect()
+    {
+        if (_link.Connected || _reconnecting) return;
+        _reconnecting = true;
+        System.Threading.Tasks.Task.Run(() =>
+        {
+            try { _link.TryConnect(); }
+            finally { _reconnecting = false; }
+        });
     }
 
     // Lädt das eingebettete audioknubbel.ico; fällt im Fehlerfall auf das

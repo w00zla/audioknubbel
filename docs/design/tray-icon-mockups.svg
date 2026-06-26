@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="920" viewBox="0 0 1280 920">
+  <defs>
+    <radialGradient id="knob" cx="38%" cy="30%" r="70%">
+      <stop offset="0" stop-color="#f7fbff"/>
+      <stop offset="0.18" stop-color="#6f8798"/>
+      <stop offset="0.48" stop-color="#17222b"/>
+      <stop offset="1" stop-color="#05080b"/>
+    </radialGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3f7fa"/>
+      <stop offset="0.44" stop-color="#81909a"/>
+      <stop offset="0.52" stop-color="#1e2830"/>
+      <stop offset="1" stop-color="#eef5f7"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000" flood-opacity=".35"/>
+    </filter>
+
+    <symbol id="icon-arc" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="29" fill="#081017"/>
+      <circle cx="32" cy="32" r="24" fill="none" stroke="#dce8ee" stroke-width="5"/>
+      <path d="M18 51 A24 24 0 1 1 54 24" fill="none" stroke="#29e6c9" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="32" cy="32" r="17" fill="url(#knob)"/>
+      <circle cx="26" cy="24" r="3" fill="#fff" opacity=".92"/>
+      <circle cx="32" cy="32" r="5" fill="#020507" opacity=".75"/>
+    </symbol>
+
+    <symbol id="icon-speaker" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="29" fill="#081017"/>
+      <circle cx="32" cy="32" r="21" fill="url(#knob)"/>
+      <path d="M18 49 A24 24 0 1 1 51 17" fill="none" stroke="#24b7ff" stroke-width="5" stroke-linecap="round"/>
+      <path d="M21 43 A14 14 0 0 0 21 21" fill="none" stroke="#79ff2d" stroke-width="4" stroke-linecap="round"/>
+      <path d="M43 21 A14 14 0 0 1 43 43" fill="none" stroke="#79ff2d" stroke-width="4" stroke-linecap="round"/>
+      <path d="M13 49 A24 24 0 0 0 13 15" fill="none" stroke="#79ff2d" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+      <path d="M51 15 A24 24 0 0 1 51 49" fill="none" stroke="#79ff2d" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+      <circle cx="32" cy="32" r="5" fill="#020507" opacity=".75"/>
+    </symbol>
+
+    <symbol id="icon-display" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="30" fill="#03070b"/>
+      <circle cx="32" cy="32" r="26" fill="#09151d" stroke="#33414a" stroke-width="2"/>
+      <path d="M14 43 A22 22 0 1 1 52 19" fill="none" stroke="#69f5ff" stroke-width="6" stroke-linecap="round"/>
+      <path d="M20 42 A16 16 0 1 1 46 24" fill="none" stroke="#ff4d6d" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+      <circle cx="32" cy="32" r="8" fill="#dffaff"/>
+      <circle cx="32" cy="32" r="4" fill="#061117"/>
+    </symbol>
+
+    <symbol id="icon-pill" viewBox="0 0 64 64">
+      <rect x="7" y="12" width="50" height="40" rx="14" fill="#111a21"/>
+      <circle cx="28" cy="32" r="18" fill="url(#metal)"/>
+      <circle cx="28" cy="32" r="13" fill="url(#knob)"/>
+      <path d="M41 23 A16 16 0 0 1 43 43" fill="none" stroke="#9cff28" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="20" cy="24" r="2" fill="#0b1116"/>
+      <circle cx="43" cy="40" r="2" fill="#0b1116"/>
+    </symbol>
+
+    <symbol id="icon-mute" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="29" fill="#081017"/>
+      <circle cx="32" cy="32" r="20" fill="url(#knob)"/>
+      <path d="M15 46 A24 24 0 1 1 49 18" fill="none" stroke="#ff304c" stroke-width="7" stroke-linecap="round"/>
+      <path d="M17 16 L48 48" stroke="#ff304c" stroke-width="8" stroke-linecap="round"/>
+      <path d="M18 16 L49 48" stroke="#ffe7eb" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+    </symbol>
+
+    <symbol id="icon-usb" viewBox="0 0 64 64">
+      <circle cx="29" cy="31" r="24" fill="#091017"/>
+      <circle cx="29" cy="31" r="17" fill="url(#knob)"/>
+      <path d="M16 48 A22 22 0 1 1 48 18" fill="none" stroke="#25e7b8" stroke-width="5" stroke-linecap="round"/>
+      <path d="M42 27 h8 v8 h-8 z" fill="#eff8ff"/>
+      <path d="M39 31 H28 M28 31 V20 M28 31 V43 M28 20 L24 24 M28 20 L32 24 M28 43 L24 39 M28 43 L32 39" fill="none" stroke="#eff8ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+
+  <rect width="1280" height="920" fill="#f4f6f8"/>
+  <text x="48" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#111820">audioknubbel tray icon mockups</text>
+  <text x="48" y="88" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#4a5660">Each option is shown at large preview plus 32 px, 24 px, and 16 px approximations.</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <g transform="translate(48 124)">
+      <rect width="368" height="230" rx="8" fill="#fff" stroke="#d8dee4"/>
+      <use href="#icon-arc" x="30" y="38" width="104" height="104" filter="url(#shadow)"/>
+      <use href="#icon-arc" x="184" y="45" width="32" height="32"/>
+      <use href="#icon-arc" x="232" y="49" width="24" height="24"/>
+      <use href="#icon-arc" x="272" y="53" width="16" height="16"/>
+      <text x="30" y="176" font-size="18" font-weight="700" fill="#111820">A. Knob + volume arc</text>
+      <text x="30" y="202" font-size="13" fill="#52606a">Most device-like, cleanest at tiny size.</text>
+      <text x="184" y="92" font-size="11" fill="#71808c">32</text>
+      <text x="232" y="92" font-size="11" fill="#71808c">24</text>
+      <text x="272" y="92" font-size="11" fill="#71808c">16</text>
+    </g>
+
+    <g transform="translate(456 124)">
+      <rect width="368" height="230" rx="8" fill="#fff" stroke="#d8dee4"/>
+      <use href="#icon-speaker" x="30" y="38" width="104" height="104" filter="url(#shadow)"/>
+      <use href="#icon-speaker" x="184" y="45" width="32" height="32"/>
+      <use href="#icon-speaker" x="232" y="49" width="24" height="24"/>
+      <use href="#icon-speaker" x="272" y="53" width="16" height="16"/>
+      <text x="30" y="176" font-size="18" font-weight="700" fill="#111820">B. Knob + speaker waves</text>
+      <text x="30" y="202" font-size="13" fill="#52606a">Very readable audio meaning, slightly generic.</text>
+      <text x="184" y="92" font-size="11" fill="#71808c">32</text>
+      <text x="232" y="92" font-size="11" fill="#71808c">24</text>
+      <text x="272" y="92" font-size="11" fill="#71808c">16</text>
+    </g>
+
+    <g transform="translate(864 124)">
+      <rect width="368" height="230" rx="8" fill="#fff" stroke="#d8dee4"/>
+      <use href="#icon-display" x="30" y="38" width="104" height="104" filter="url(#shadow)"/>
+      <use href="#icon-display" x="184" y="45" width="32" height="32"/>
+      <use href="#icon-display" x="232" y="49" width="24" height="24"/>
+      <use href="#icon-display" x="272" y="53" width="16" height="16"/>
+      <text x="30" y="176" font-size="18" font-weight="700" fill="#111820">C. Round display mark</text>
+      <text x="30" y="202" font-size="13" fill="#52606a">Matches the firmware UI, least obvious as audio.</text>
+      <text x="184" y="92" font-size="11" fill="#71808c">32</text>
+      <text x="232" y="92" font-size="11" fill="#71808c">24</text>
+      <text x="272" y="92" font-size="11" fill="#71808c">16</text>
+    </g>
+
+    <g transform="translate(48 394)">
+      <rect width="368" height="230" rx="8" fill="#fff" stroke="#d8dee4"/>
+      <use href="#icon-pill" x="30" y="38" width="104" height="104" filter="url(#shadow)"/>
+      <use href="#icon-pill" x="184" y="45" width="32" height="32"/>
+      <use href="#icon-pill" x="232" y="49" width="24" height="24"/>
+      <use href="#icon-pill" x="272" y="53" width="16" height="16"/>
+      <text x="30" y="176" font-size="18" font-weight="700" fill="#111820">D. Tiny hardware badge</text>
+      <text x="30" y="202" font-size="13" fill="#52606a">Suggests the physical board, busier in tray.</text>
+      <text x="184" y="92" font-size="11" fill="#71808c">32</text>
+      <text x="232" y="92" font-size="11" fill="#71808c">24</text>
+      <text x="272" y="92" font-size="11" fill="#71808c">16</text>
+    </g>
+
+    <g transform="translate(456 394)">
+      <rect width="368" height="230" rx="8" fill="#fff" stroke="#d8dee4"/>
+      <use href="#icon-mute" x="30" y="38" width="104" height="104" filter="url(#shadow)"/>
+      <use href="#icon-mute" x="184" y="45" width="32" height="32"/>
+      <use href="#icon-mute" x="232" y="49" width="24" height="24"/>
+      <use href="#icon-mute" x="272" y="53" width="16" height="16"/>
+      <text x="30" y="176" font-size="18" font-weight="700" fill="#111820">E. Mute state companion</text>
+      <text x="30" y="202" font-size="13" fill="#52606a">Best as alternate state, not the main icon.</text>
+      <text x="184" y="92" font-size="11" fill="#71808c">32</text>
+      <text x="232" y="92" font-size="11" fill="#71808c">24</text>
+      <text x="272" y="92" font-size="11" fill="#71808c">16</text>
+    </g>
+
+    <g transform="translate(864 394)">
+      <rect width="368" height="230" rx="8" fill="#fff" stroke="#d8dee4"/>
+      <use href="#icon-usb" x="30" y="38" width="104" height="104" filter="url(#shadow)"/>
+      <use href="#icon-usb" x="184" y="45" width="32" height="32"/>
+      <use href="#icon-usb" x="232" y="49" width="24" height="24"/>
+      <use href="#icon-usb" x="272" y="53" width="16" height="16"/>
+      <text x="30" y="176" font-size="18" font-weight="700" fill="#111820">F. USB device sync</text>
+      <text x="30" y="202" font-size="13" fill="#52606a">Good for companion app, weaker for volume.</text>
+      <text x="184" y="92" font-size="11" fill="#71808c">32</text>
+      <text x="232" y="92" font-size="11" fill="#71808c">24</text>
+      <text x="272" y="92" font-size="11" fill="#71808c">16</text>
+    </g>
+  </g>
+
+  <g transform="translate(48 700)" font-family="Segoe UI, Arial, sans-serif">
+    <text x="0" y="0" font-size="20" font-weight="700" fill="#111820">Tray-size read</text>
+    <text x="0" y="30" font-size="14" fill="#52606a">My short take: A is the strongest main icon; E should be the mute variant; C is the nicest if we want to match the round screen more than the audio function.</text>
+    <rect x="0" y="58" width="1184" height="98" rx="8" fill="#151a20"/>
+    <use href="#icon-arc" x="30" y="86" width="32" height="32"/>
+    <use href="#icon-speaker" x="92" y="86" width="32" height="32"/>
+    <use href="#icon-display" x="154" y="86" width="32" height="32"/>
+    <use href="#icon-pill" x="216" y="86" width="32" height="32"/>
+    <use href="#icon-mute" x="278" y="86" width="32" height="32"/>
+    <use href="#icon-usb" x="340" y="86" width="32" height="32"/>
+    <text x="410" y="109" font-size="14" fill="#c4ccd3">Dark taskbar simulation at 32 px</text>
+  </g>
+</svg>

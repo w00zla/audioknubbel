@@ -24,42 +24,54 @@ public sealed class SerialLink : ISerialSink, IDisposable
         lock (_gate)
         {
             if (_port?.IsOpen == true) return true;
+        }
 
-            var portName = PortDiscovery.FindPort();
-            if (portName is null) return false;
-            try
-            {
-                var p = new SerialPort(portName, 115200)
-                {
-                    NewLine = "\n",
-                    WriteTimeout = 500,
-                    ReadTimeout = 500,
-                    // ESP32-S3-USB-CDC sendet nur (z. B. die AUDIOKNUBBEL-Antwort auf
-                    // ID?), wenn der Host DTR setzt. Ohne das schlägt der Handshake
-                    // fehl und es wird nie verbunden. Löst keinen Reset aus.
-                    DtrEnable = true,
-                    RtsEnable = true,
-                };
-                p.Open();
+        var portName = PortDiscovery.FindPort();
+        if (portName is null) return false;
 
-                // Handshake: nur behalten, wenn das Board mit AUDIOKNUBBEL antwortet.
-                // So latcht die Discovery nicht auf dem Bootloader-/Flash-Port, der
-                // dieselbe Espressif-VID (303A) trägt, aber nicht auf ID? antwortet.
-                if (!Handshake(p))
-                {
-                    try { p.Close(); } catch { }
-                    p.Dispose();
-                    _port = null;
-                    return false;
-                }
-                _port = p;
-                PortName = portName;
-            }
-            catch
+        SerialPort? candidate = null;
+        try
+        {
+            candidate = new SerialPort(portName, 115200)
             {
-                _port = null;
+                NewLine = "\n",
+                WriteTimeout = 500,
+                ReadTimeout = 500,
+                // ESP32-S3-USB-CDC sendet nur (z. B. die AUDIOKNUBBEL-Antwort auf
+                // ID?), wenn der Host DTR setzt. Ohne das schlägt der Handshake
+                // fehl und es wird nie verbunden. Löst keinen Reset aus.
+                DtrEnable = true,
+                RtsEnable = true,
+            };
+            candidate.Open();
+
+            // Slow path stays outside _gate so tray/menu reads of Connected do not
+            // freeze while WMI/serial probing is waiting on a missing board.
+            if (!Handshake(candidate))
+            {
+                candidate.Close();
+                candidate.Dispose();
                 return false;
             }
+        }
+        catch
+        {
+            try { candidate?.Close(); } catch { }
+            candidate?.Dispose();
+            return false;
+        }
+
+        lock (_gate)
+        {
+            if (_port?.IsOpen == true)
+            {
+                candidate.Close();
+                candidate.Dispose();
+                return true;
+            }
+
+            _port = candidate;
+            PortName = portName;
         }
         ConnectionChanged?.Invoke(true);
         return true;

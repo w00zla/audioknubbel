@@ -10,6 +10,8 @@ public sealed class TrayAppContext : ApplicationContext
     private readonly VolumeMonitor _monitor = new();
     private readonly SerialLink _link = new();
     private readonly SyncController _sync;
+    private readonly Icon _connectedIcon = TrayIconSet.LoadForConnectionState(connected: true);
+    private readonly Icon _disconnectedIcon = TrayIconSet.LoadForConnectionState(connected: false);
     private readonly NotifyIcon _tray;
     private ToolStripMenuItem _statusItem = null!;   // zeigt Port + Verbindungsstatus
     private ToolStripMenuItem _brightnessMenu = null!;   // Untermenü „Helligkeit"
@@ -37,7 +39,7 @@ public sealed class TrayAppContext : ApplicationContext
 
         _tray = new NotifyIcon
         {
-            Icon = LoadTrayIcon(),
+            Icon = _disconnectedIcon,
             Text = "audioknubbel: suche Board…",
             Visible = true,
             ContextMenuStrip = BuildMenu(),
@@ -58,8 +60,8 @@ public sealed class TrayAppContext : ApplicationContext
         // Tick läuft auf dem UI-Thread -> liefe das synchron, fröre das Tray bei jedem
         // Versuch ein. Darum auf einen Background-Thread auslagern (wie QueryConfigAsync);
         // ConnectionChanged marshallt sich via Post selbst zurück. _reconnecting verhindert,
-        // dass sich langsame Versuche stapeln, solange der 2-s-Timer weiterläuft.
-        _reconnect = new System.Windows.Forms.Timer { Interval = 2000 };
+        // dass sich langsame Versuche stapeln, solange der 5-s-Timer weiterläuft.
+        _reconnect = new System.Windows.Forms.Timer { Interval = 5000 };
         _reconnect.Tick += (_, _) => BeginReconnect();
         _reconnect.Start();
 
@@ -89,15 +91,6 @@ public sealed class TrayAppContext : ApplicationContext
         });
     }
 
-    // Lädt das eingebettete audioknubbel.ico; fällt im Fehlerfall auf das
-    // System-Icon zurück, damit das Tray nie ohne Symbol dasteht.
-    private static Icon LoadTrayIcon()
-    {
-        var asm = typeof(TrayAppContext).Assembly;
-        using var stream = asm.GetManifestResourceStream("AudioKnubbel.Companion.audioknubbel.ico");
-        return stream is not null ? new Icon(stream) : SystemIcons.Application;
-    }
-
     private ContextMenuStrip BuildMenu()
     {
         var menu = new ContextMenuStrip();
@@ -107,7 +100,7 @@ public sealed class TrayAppContext : ApplicationContext
         menu.Items.Add(_statusItem);
         menu.Items.Add(new ToolStripSeparator());
 
-        // Kein manuelles "Reconnect"-Item: der _reconnect-Timer (2 s) verbindet eh
+        // Kein manuelles "Reconnect"-Item: der _reconnect-Timer (5 s) verbindet eh
         // automatisch neu, solange getrennt.
         var autostart = new ToolStripMenuItem("Mit Windows starten")
         {
@@ -315,6 +308,7 @@ public sealed class TrayAppContext : ApplicationContext
     {
         bool conn = _link.Connected;
         string port = _link.PortName ?? "—";
+        _tray.Icon       = conn ? _connectedIcon : _disconnectedIcon;
         _tray.Text       = conn ? $"audioknubbel: {port} verbunden" : "audioknubbel: getrennt (suche…)";
         _statusItem.Text = conn ? $"Verbunden: {port}" : "Getrennt – suche Board…";
     }
@@ -328,6 +322,8 @@ public sealed class TrayAppContext : ApplicationContext
             _heartbeat.Dispose();
             _tray.Visible = false;
             _tray.Dispose();
+            _connectedIcon.Dispose();
+            _disconnectedIcon.Dispose();
             _monitor.Dispose();
             _link.Dispose();
             _marshal.Dispose();
